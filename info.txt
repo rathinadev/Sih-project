@@ -1,0 +1,25 @@
+1.Run encrypt1.py to test encryption and decryption
+
+2.REDIS:
+    aes keys in db 1
+    rsa keys in db 2
+
+    model and json in db 3
+
+
+3.Compare files using : https://www.diffnow.com/compare-files
+4.Run key_management1.py to keep the system with ample aes keys and rsa keys
+5.Run encrypt1.py to test encryption and decryption
+6.Notes related to this project in : https://docs.google.com/document/d/1y3Ii04JaL8B6akk-49k5IP3M7lxtiysEVKruaWv2yNE/edit?addon_store&tab=t.0
+
+
+def monitor_redis_keys():
+    while True:
+        # Check and generate AES keys if needed
+        check_and_generate_aes_keys(min_keys=5)
+
+        # Check and generate RSA keys if needed
+        check_and_generate_rsa_keys(min_keys=3)
+
+        # Sleep for a specified period (e.g., 1 minute) before checking again
+        time.sleep(30)  # 60 seconds

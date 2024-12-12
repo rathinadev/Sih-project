@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" id="html">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>Aadhaar - Login</title>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <header class="header">
+      <div class="header__container">
+        <div class="header__logo-left">
+          <img src="/static/uidai.svg" class="uidaiLogo" alt="uidai-logo" />
+        </div>
+        <div class="header__logo-right">
+          <img src="/static/aadharlogo.svg" class="aadhaarLogo" alt="aadhaar-logo" />
+        </div>
+      </div>
+    </header>
+
+    <main>
+        <div class="login-container">
+            <h2>Login to Aadhaar via OTP</h2>
+            <form>
+                <div class="form-group">
+                    <label for="aadhaar-number">Enter Aadhaar Number</label>
+                    <input type="text" id="aadhaar-number" placeholder="Enter Aadhaar Number" required />
+                </div>
+                <div class="form-group">
+                    <label for="captcha">Enter Captcha</label>
+                    <div class="captcha-container">
+                        <input type="text" id="captcha" placeholder="Enter Captcha" required />
+                        <img src="/static/captcha.jpg" alt="captcha" class="captcha-image" />
+                        <button type="button" class="refresh-captcha">🔄</button>
+                    </div>
+                </div>
+                <button type="submit" class="login-button">Login With OTP</button>
+            </form>
+        </div>
+    </main>
+
+    <footer id="footerHeight">
+      <p class="copyright-text">
+        Copyright © 2020 Unique Identification Authority of India All Rights Reserved
+      </p>
+    </footer>
+</body>
+</html>

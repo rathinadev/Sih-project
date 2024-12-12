@@ -1,0 +1,274 @@
+/* Global Styles */
+*,
+:after,
+:before {
+  box-sizing: border-box;
+  font-family: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 75%;
+  height: 100%; /* Ensure full height */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  height: 100%; /* Ensure full height */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content area between header and footer */
+main {
+  flex: 1; /* Fills remaining space between header and footer */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  flex-direction: row; /* Side-by-side for medium and large screens */
+  gap: 20px; /* Space between login and webcam containers */
+}
+
+/* Header Styles */
+.header {
+  background-color: #fff;
+  border-bottom: 2px solid #020b50;
+  height: 70px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 5;
+}
+
+.header__container {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1170px;
+  min-height: 65px;
+  padding: 6px 16px;
+}
+
+.header__logo-left,
+.header__logo-right {
+  align-items: center;
+  display: flex;
+}
+
+.header__logo-left {
+  max-width: 70%;
+}
+
+.header__logo-right {
+  max-width: 20%;
+}
+
+.header__logo-left img,
+.header__logo-right img {
+  width: 100%;
+}
+
+/* Footer Styles */
+footer {
+  background-color: #020348;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+}
+
+.copyright-text {
+  font-size: 1rem;
+}
+
+/* Form Styles */
+.login-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  color: #555;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.captcha-container {
+  display: flex;
+  align-items: center;
+}
+
+.captcha-image {
+  margin-left: 10px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.refresh-captcha {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  margin-left: 5px;
+}
+
+.login-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+/* OTP Input Style */
+#otp-input {
+  margin-top: 15px;
+}
+
+/* Error Styles */
+.error {
+  color: red;
+  padding: 5px 0;
+  text-align: center;
+}
+
+/* Webcam Styles */
+.webcam-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px; /* Keep the width similar to the login container */
+  text-align: center;
+}
+
+/* Ensure the webcam fits properly */
+#webcam {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 8px;
+  margin-top: 15px;
+  border: 2px solid #007bff;
+}
+
+/* Card Styles */
+.card {
+  border-radius: 6px;
+  box-shadow: 0 2px 5px -1px #32325d40, 0 1px 3px -1px #0000004d;
+  margin: auto;
+  max-width: 400px;
+  overflow: hidden;
+  padding: 20px 16px;
+  position: relative;
+  width: 100%;
+}
+
+.card:before {
+  background: linear-gradient(119.54deg, #000046, #1cb5e0);
+  content: "";
+  height: 5px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 769px) {
+  /* Side-by-side layout for medium and large screens */
+  main {
+    flex-direction: row;
+    gap: 20px; /* Space between login and webcam containers */
+  }
+}
+
+@media (max-width: 768px) {
+  /* Stack containers vertically for small screens */
+  main {
+    flex-direction: column;
+    gap: 20px; /* Space between login and webcam containers */
+  }
+
+  .webcam-container {
+    position: static; /* Reset positioning for small screens */
+    width: 100%; /* Full width for small screens */
+    max-width: none; /* Remove max-width for small screens */
+  }
+}
+
+
+.login-button,
+.enable-webcam-button,
+#otp-login-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.verify-liveness,
+#otp-login-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.login-button:hover,
+.enable-webcam-button:hover,
+#otp-login-button:hover {
+    background-color: #0056b3;
+}
