@@ -3,6 +3,8 @@
 
 The **Smart Identity Verification System (SIH)** is a multi-layered authentication solution that combines traditional and cutting-edge technologies to ensure secure and reliable user identity verification. This project demonstrates our commitment to robust security, innovative design, and seamless user experience.
 
+> **Note:** *Custom model implementation is still in progress. Currently, the project is using inbuilt JavaScript models on the client side for facial recognition and liveness detection.*
+
 ---
 
 ## Table of Contents
@@ -40,52 +42,52 @@ This project not only integrates multiple modern technologies but also demonstra
 
 ## Features
 
-- **OTP Authentication:** Secure OTP generation, storage (with expiration), and verification to validate user identity.
-- **Cryptographic Security:** 
-  - **RSA Encryption:** For secure transmission and digital signature of model data.
-  - **AES Key Management:** Dynamically assigned and encrypted with client RSA keys.
-- **Redis Integration:** Utilized for fast in-memory storage of AES keys, RSA keys, models, and user assignments.
-- **Session Management:** Secure session storage with Flask to ensure that only validated users access protected endpoints.
-- **Dynamic Content Delivery:** On-demand delivery of encrypted models and image files with integrity checks.
-- **Detailed Logging & Debugging:** Extensive logging for troubleshooting and validation.
+- **Multi-Factor Authentication:** Combines Aadhaar, CAPTCHA, OTP, and facial recognition.
+- **Real-Time Verification:** Uses client-side built-in JavaScript models for immediate facial recognition (custom models are under development).
+- **Cryptographic Security:**  
+  - **RSA Encryption:** Secure digital signatures for model integrity.
+  - **AES Key Management:** Dynamically assigned and encrypted using RSA.
+- **Redis Integration:** Fast in-memory storage for keys, models, and user assignments.
+- **Secure Session Management:** Protects sensitive endpoints with robust session validation.
+- **Dynamic Content Delivery:** On-demand delivery of encrypted models and images.
 
 ---
 
 ## Tech Stack
 
-- **Programming Language:** Python 3.x  
-- **Web Framework:** [Flask](https://flask.palletsprojects.com/)
-- **Cryptography:** [cryptography](https://cryptography.io/) library (RSA, AES, digital signatures)
-- **Database & Caching:** Redis (multiple DBs for different data types) and temporary in-memory storage for OTPs
-- **Image Processing & File Handling:** Built-in Python libraries (os, io, base64)
-- **Session Management:** Flask sessions with secure secret keys
-- **Utilities:** UUID, random, datetime, logging, and hashlib for additional functionality
+- **Backend:**
+  - Python 3.x
+  - [Flask](https://flask.palletsprojects.com/)
+  - [Redis](https://redis.io/) for caching and key management
+  - [cryptography](https://cryptography.io/) for RSA/AES operations and digital signatures
+- **Frontend:**
+  - HTML5, CSS3, JavaScript (ES6)
+  - Built-in JavaScript models for real-time facial recognition (custom model implementation is ongoing)
+- **Utilities:**
+  - UUID, random, datetime, logging, hashlib for supplementary functionality
 
 ---
 
 ## System Architecture & Workflow
 
 1. **User Initiation:**  
-   - The user starts by providing an Aadhaar number.  
+   - The user begins by providing an Aadhaar number.
    - An OTP is generated and sent (simulated via console output) to the user.
   
 2. **OTP Verification:**  
    - The OTP submitted by the user is validated against a temporary store (with a 5-minute expiry).
-   - Upon successful OTP validation, the user is marked as verified and assigned a unique user ID.
+   - Upon successful verification, the user is assigned a unique user ID and marked as verified.
   
 3. **Key Assignment & Model Access:**  
    - A random AES key is assigned from a pool stored in Redis.
-   - The verified user can request a secured model file which is:
-     - Retrieved from Redis.
-     - Digitally signed using RSA (ensuring model integrity).
-     - Sent as a downloadable binary file.
+   - The verified user can request a secured model file which is digitally signed and delivered as a downloadable binary file.
   
 4. **Secure Data Transmission:**  
-   - Endpoints to fetch the AES key encrypt it with the client's RSA public key.
-   - Images (or other assets) are served securely on demand.
-
+   - Endpoints fetch the AES key and encrypt it with the client's RSA public key.
+   - Images and model files are served securely upon request.
+  
 5. **Session & Access Control:**  
-   - A decorator (`require_verified_user`) protects endpoints, ensuring that only verified sessions can access sensitive operations.
+   - A decorator (`require_verified_user`) ensures only verified users can access protected endpoints.
 
 ---
 
@@ -94,41 +96,36 @@ This project not only integrates multiple modern technologies but also demonstra
 ### Prerequisites
 
 - **Python 3.x**  
-- **Redis Server:** Ensure Redis is installed and running on your local machine (default ports used: 6379 for different DBs).
-- **Virtual Environment (Recommended):**
+- **Redis Server:** Make sure Redis is installed and running (default ports are used).
+- **Virtual Environment (Recommended)**
 
 ### Steps to Install
 
 1. **Clone the Repository:**
-
    ```bash
    git clone https://your-repository-url.git
    cd sih-project
    ```
 
 2. **Setup Virtual Environment:**
-
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
 3. **Install Dependencies:**
-
    ```bash
    pip install -r requirements.txt
    ```
 
 4. **Configure Redis:**  
-   - Ensure that Redis is running and accessible on the default ports.
-   - Adjust Redis configurations in `app.py` if necessary.
+   - Ensure Redis is running and accessible on the default ports.
+   - Adjust Redis configurations in `app.py` if needed.
 
 5. **Run the Application:**
-
    ```bash
    python app.py
    ```
-
    The server will start (typically on `http://127.0.0.1:5000`).
 
 ---
@@ -140,40 +137,41 @@ This project not only integrates multiple modern technologies but also demonstra
 - **Endpoint:** `/send-otp` (POST)  
   **Functionality:**  
   - Generates a 6-digit OTP.
-  - Stores OTP with a 5-minute expiration.
-  - Simulates OTP delivery (e.g., via SMS integration in production).
+  - Stores the OTP with a 5-minute expiration.
+  - Simulates OTP delivery (production systems should integrate an SMS/email service).
 
 - **Endpoint:** `/verify-otp` (POST)  
   **Functionality:**  
-  - Validates the provided OTP against the stored value.
-  - If valid, marks the session as verified, assigns a unique user ID, and assigns an AES key.
+  - Validates the provided OTP.
+  - On success, marks the session as verified, assigns a unique user ID, and assigns an AES key.
+  - Clears the OTP after successful verification.
 
 ### Key Management with Redis
 
 - **Redis Databases:**  
-  - **DB 1:** For storing AES keys.  
-  - **DB 2:** For RSA key storage.
-  - **DB 3:** For model metadata (including model paths).
-  - **DB 5:** For user assignments (mapping user IDs to keys).
-
+  - **DB 1:** AES keys  
+  - **DB 2:** RSA keys  
+  - **DB 3:** Model metadata (paths)  
+  - **DB 5:** User assignments (mapping user IDs to keys)
+  
 - **AES Key Assignment:**  
-  - A random AES key is selected and associated with the user’s session.
-  - The key is later encrypted with the client’s RSA public key upon request.
+  - A random AES key is selected from Redis and assigned to the verified user session.
 
 ### Model Signing and Retrieval
 
 - **Endpoint:** `/get-model` (GET, Protected)  
   **Functionality:**  
   - Retrieves the model path from Redis.
-  - Opens and reads the encrypted model file.
-  - Provides the file as a download after calculating its SHA-256 hash.
+  - Reads the encrypted model file.
+  - Calculates its SHA-256 hash.
+  - Provides the model file as a download.
   
 - **Digital Signature:**  
   - **Function:** `sign_model(model_path)`  
     - Reads the model data.
     - Creates a SHA-256 hash.
-    - Signs the hash with a randomly selected RSA private key.
-    - Returns the Base64-encoded signature and public key PEM.
+    - Signs the hash with an RSA private key.
+    - Returns a Base64-encoded signature and public key PEM.
 
 ### Image and AES Key Delivery
 
@@ -184,51 +182,57 @@ This project not only integrates multiple modern technologies but also demonstra
 - **Endpoint:** `/fetch-aes-key` (POST, Protected)  
   **Functionality:**  
   - Accepts a client’s RSA public key.
-  - Retrieves the AES key from Redis.
-  - Encrypts the AES key using the client's RSA public key.
+  - Retrieves and encrypts the AES key with the client's RSA public key.
   - Returns the encrypted AES key in Base64 format.
 
 ### Session Management and Security
 
 - **Session Handling:**  
-  - Flask sessions are used to store the user's unique ID and verification status.
+  - Flask sessions are used to store a unique user ID and verification status.
   
 - **Access Control Decorator:**  
   - **Function:** `require_verified_user`  
-    - Checks for a valid session and verified status.
-    - Performs additional Redis-based session validation.
+    - Validates the session and checks for a verified user.
+    - Performs additional Redis-based validation.
     - Clears the session and redirects if verification fails.
 
 ---
 
 ## Challenges & Efforts
 
-This project embodies a significant development effort, addressing numerous technical challenges:
+The SIH project represents a significant development effort addressing multiple technical challenges:
+
 - **Multi-Layered Security:**  
-  Integrating OTP, RSA, AES, and Redis required careful planning to ensure data security and integrity.
+  Integrating OTP, RSA, AES, and Redis required careful planning to ensure data integrity and security.
+  
 - **Real-Time Cryptographic Operations:**  
-  Handling key encryption and model signing in real-time was a complex task that involved deep understanding of cryptographic principles.
+  Handling key encryption and model signing in real-time demanded a deep understanding of cryptographic principles.
+  
 - **Robust Session Management:**  
-  Ensuring that only verified users can access sensitive endpoints demanded rigorous session validation and error handling.
+  Ensuring that only verified users access sensitive endpoints involved rigorous session validation and error handling.
+  
 - **Scalable Architecture:**  
-  Using Redis for fast in-memory operations and key management sets the foundation for scaling the application in production.
-- **User-Centric Design:**  
-  Extensive logging, detailed error messages, and modular code design help ensure that the system is both robust and maintainable.
+  Utilizing Redis for fast in-memory operations lays the groundwork for future scaling.
+  
+- **Custom Model Implementation:**  
+  *While our current implementation uses built-in JavaScript models on the client side for facial recognition and liveness detection, our team is actively developing a custom model to further enhance the system's accuracy and performance.*
 
 ---
 
 ## Future Enhancements
 
+- **Custom Model Implementation:**  
+  Finalize and integrate a custom-trained model for facial recognition to replace the inbuilt JS models currently in use.
 - **Enhanced OTP Delivery:**  
   Integrate with SMS or email services for real-time OTP delivery.
 - **Improved Cryptographic Security:**  
-  Explore additional layers of encryption and more secure key rotation mechanisms.
+  Explore additional layers of encryption and secure key rotation mechanisms.
 - **Advanced Logging & Monitoring:**  
   Implement centralized logging and real-time monitoring for production deployments.
 - **UI/UX Enhancements:**  
-  Develop a more sophisticated front-end using modern frameworks like React or Vue.js.
+  Upgrade the front-end using modern frameworks such as React or Vue.js.
 - **Scalability Upgrades:**  
-  Consider migrating to a more scalable database system and deploying on cloud platforms.
+  Consider migrating to a more robust database system and deploying on cloud platforms.
 
 ---
 
@@ -251,3 +255,4 @@ We would like to acknowledge:
 - Our mentors and peers for their guidance throughout the development process.
 
 ---
+
