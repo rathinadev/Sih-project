@@ -104,7 +104,7 @@ This project not only integrates multiple modern technologies but also demonstra
 1. **Clone the Repository:**
    ```bash
    git clone https://github.com/rathinadev/Sih-project.git
-   cd sih-project
+   cd Sih-project
    ```
 
 2. **Setup Virtual Environment:**
