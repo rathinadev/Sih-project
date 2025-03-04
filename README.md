@@ -103,7 +103,7 @@ This project not only integrates multiple modern technologies but also demonstra
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://your-repository-url.git
+   git clone https://github.com/rathinadev/Sih-project.git
    cd sih-project
    ```
 
